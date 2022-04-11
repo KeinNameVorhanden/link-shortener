@@ -46,6 +46,22 @@ app.MapGet("/{shortUrl}", (string shortUrl, ILiteDatabase _context) =>
     return Results.NoContent();
 });
 
+app.MapPut("/update", (string shortUrl, string url, ILiteDatabase _context) =>
+{
+    var id = _hashIds.Decode(shortUrl);
+    if (id is null) return Results.NotFound();
+    var tempId = id[0];
+    var db = _context.GetCollection<shortUrl>();
+    var entry = db.Query().Where(x => x.Id.Equals(tempId)).ToList().FirstOrDefault();
+    if (entry != null)
+    {
+        entry.longUrl = url;
+        db.Update(entry);
+        return Results.Ok();
+    }
+    return Results.NotFound();
+});
+
 app.MapDelete("/delete", (string shortUrl, ILiteDatabase _context) =>
 {
     var id = _hashIds.Decode(shortUrl);
