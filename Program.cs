@@ -28,7 +28,7 @@ app.MapPost("/create", (string url, ILiteDatabase _context) =>
     {
         id = entry.Id;
     }
-    //var id = db.Insert(url);
+
     return Results.Created("ShortURL: ", _hashIds.Encode(id));
 });
 
@@ -45,8 +45,6 @@ app.MapGet("/{shortUrl}", (string shortUrl, ILiteDatabase _context) =>
     }
     return Results.NoContent();
 });
-
-//app.MapPut("/update")
 
 app.MapDelete("/delete", (string shortUrl, ILiteDatabase _context) =>
 {
